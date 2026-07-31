@@ -37,6 +37,7 @@ title: Example project
 mode: writing
 status: seed
 created: 2026-07-31
+seed_sha256:
 source_roots:
   - /absolute/read-only/path
 target_repo:
@@ -45,6 +46,8 @@ target_repo:
 Valid modes are `writing` and `building`. Valid states are `seed`, `scoped`, `researching`, `distilled`, `critiqued`, `approved`, `rendered`, `implemented`, and `verified`.
 
 State transitions are forward-only except `researching ↔ distilled` and `distilled ↔ critiqued`, which allow iteration. Only explicit user approval permits `approved`. Research does not permit publication or target-repository edits.
+
+Leave `seed_sha256` empty while drafting the seed. Freeze it before research with `scripts/freeze_seed.py`; subsequent lint runs fail if `seed.md` changes.
 
 ## Source index
 

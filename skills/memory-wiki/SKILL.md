@@ -9,7 +9,8 @@ Turn broad, mostly read-only sources into a small living context layer for one c
 
 ## Choose the operation
 
-- **Initialize**: Run `python3 scripts/init_project.py <project-dir> --mode writing|building --title "..."` from this skill directory.
+- **Initialize**: Run `python3 scripts/init_project.py <project-dir> --mode writing|building --title "..."` from this skill directory. Prefer `--seed-file` when a brain dump already exists.
+- **Freeze seed**: After the user finishes a generated `seed.md`, run `python3 scripts/freeze_seed.py <project-dir>` before research.
 - **Research**: Read the seed, retrieve sources, and create or extend the wiki.
 - **Query**: Answer a question through progressive disclosure and persist reusable findings.
 - **Distill**: Compile the relevant research into `guideline.md`.
