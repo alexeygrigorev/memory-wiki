@@ -16,6 +16,7 @@ Turn broad, mostly read-only sources into a small living context layer for one c
 - **Distill**: Compile the relevant research into `guideline.md`.
 - **Critique**: Run objective reflection, then grill subjective choices with the user.
 - **Lint**: Run `python3 scripts/lint_project.py <project-dir>` before approval or execution.
+- **Advance**: Run `python3 scripts/advance_project.py <project-dir> <status> --reason "..."`; add `--approve` only after explicit user approval.
 - **Render/implement**: Proceed only after the project reaches `approved`.
 
 Read [references/artifact-contract.md](references/artifact-contract.md) before changing a project workspace. For writing work, also read [references/writing.md](references/writing.md). For software work, also read [references/building.md](references/building.md).
@@ -65,7 +66,7 @@ Then:
 2. Record results in `critique.md` and revise the guideline.
 3. Run **grilling** with the user for subjective decisions. Ask focused questions about meaning, tradeoffs, narrative, voice, or product judgment.
 4. Record approvals and rejected alternatives.
-5. Set status to `approved` only after explicit user approval and a clean lint result.
+5. After explicit user approval, run `advance_project.py <project-dir> approved --approve --reason "..."`. The command enforces the guideline, critique, and lint gates.
 
 ## Finish the selected mode
 

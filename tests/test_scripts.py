@@ -129,6 +129,75 @@ sources:
             self.assertEqual(lint.returncode, 1)
             self.assertIn("selected page does not exist", lint.stdout)
 
+    def test_approval_and_mode_transitions_are_guarded(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            seed = root / "seed.md"
+            seed.write_text("# Article seed\n\nA real point of view.\n", encoding="utf-8")
+            project = root / "article"
+            init = run_script(
+                "init_project.py",
+                project,
+                "--mode",
+                "writing",
+                "--title",
+                "Article",
+                "--seed-file",
+                seed,
+            )
+            self.assertEqual(init.returncode, 0, init.stderr)
+
+            for status in ("researching", "distilled", "critiqued"):
+                advanced = run_script(
+                    "advance_project.py",
+                    project,
+                    status,
+                    "--reason",
+                    f"ready for {status}",
+                )
+                self.assertEqual(advanced.returncode, 0, advanced.stderr)
+
+            no_consent = run_script(
+                "advance_project.py",
+                project,
+                "approved",
+                "--reason",
+                "looks good",
+            )
+            self.assertEqual(no_consent.returncode, 2)
+
+            (project / "guideline.md").write_text("# Guideline\n\nA complete plan.\n", encoding="utf-8")
+            (project / "critique.md").write_text(
+                "# Critique\n\n## Reflection\n\nPassed.\n\n## Human grilling\n\nApproved by user.\n",
+                encoding="utf-8",
+            )
+            approved = run_script(
+                "advance_project.py",
+                project,
+                "approved",
+                "--approve",
+                "--reason",
+                "user approved",
+            )
+            self.assertEqual(approved.returncode, 0, approved.stderr)
+
+            wrong_mode = run_script(
+                "advance_project.py",
+                project,
+                "implemented",
+                "--reason",
+                "wrong last mile",
+            )
+            self.assertEqual(wrong_mode.returncode, 2)
+            rendered = run_script(
+                "advance_project.py",
+                project,
+                "rendered",
+                "--reason",
+                "draft rendered",
+            )
+            self.assertEqual(rendered.returncode, 0, rendered.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
